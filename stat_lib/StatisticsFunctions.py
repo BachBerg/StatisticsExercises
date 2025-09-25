@@ -77,7 +77,6 @@ class Statistics:
         else:
             return math.ceil(number * factor) / factor
 
-
     # --------------------
     # ANOVA
     # --------------------

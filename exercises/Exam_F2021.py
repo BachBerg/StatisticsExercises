@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import math
+from scipy.stats import norm
 from scipy.stats import f, t
 from stat_lib.StatisticsFunctions import Statistics
 
@@ -47,5 +48,49 @@ print(f"1.1 - P: {Statistics.truncate(P_value,2)}")
 
 
 # -----------------------------
-# Question 1.2 - (next calculation)
+# Question 1.2 - P-value for t-test
 # -----------------------------
+
+# Assuming that the true variances are the same and unknown
+# calculate the p-value for the test of
+# H0: mu1 = mu2 against H1: mu1 != mu2
+
+df = n1 + n2 - 2
+Sp2 = ((n1 - 1) * sigma1**2 + (n2 - 1) * sigma2**2) / df
+Sp = math.sqrt(Sp2) # pooled standard deviation
+Se = Sp * math.sqrt(1/n1 + 1/n2) # standard error
+
+t0 = (y1 - y2) / Se # test statistic
+# the survival function (1-CDF) gives the area to the right of t0
+# i.e. the one-tailed p-value, so we multiply by 2 for two
+# the smallest alpha that rejects H0 the test is then the p-value
+P_value = 2 * t.sf(abs(t0), df)
+print(f"1.2 - P value for the test is: {Statistics.truncate(P_value,2)}")
+# So the smallest alpha that rejects H0 the test is 0.03
+
+
+
+# -----------------------------
+# Question 1.3 - Critical value for t-test
+# -----------------------------
+# For the above hypothesis test, the manufacturer would like to know a 
+# differnece of 8% wear in the emnas ie mu1 = mu2 + 8
+# with  a high certanty. What will be the probability
+# of detecting such a difference in the menas 
+# i.e. rejecting the null hypothesis when mu1 = mu2 + 8,
+# using a significane level of 5%
+# (assume true variances are the same and equal to 16)
+
+alpha = 0.05
+n1 = n2 = 10
+sigma2 = 16  # variance
+delta = 8  # difference in means we want to detect
+
+Se = math.sqrt(sigma2/n1 + sigma2/n2)
+t_obs = delta / Se
+
+z_alpha = norm.ppf(1 - alpha/2)
+P_reject = norm.cdf(t_obs - z_alpha) + (1 - norm.cdf(t_obs + z_alpha))
+print("1.3 - P_reject:", Statistics.truncate(P_reject, 3))
+# Output ≈ 0.994
+
