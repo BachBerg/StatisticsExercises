@@ -1,0 +1,94 @@
+import math
+import unittest
+from statistics import statistics
+
+
+class TestStatistics(unittest.TestCase):
+    def setUp(self):
+        self.stats = statistics()
+
+    # --------------------
+    # Descriptive Statistics
+    # --------------------
+    def test_mean(self):
+        self.assertEqual(self.stats.mean([1, 2, 3, 4, 5]), 3)
+        self.assertEqual(self.stats.mean([]), 0)
+
+    def test_median(self):
+        self.assertEqual(self.stats.median([1, 2, 3, 4, 5]), 3)
+        self.assertEqual(self.stats.median([1, 2, 3, 4]), 2.5)
+        self.assertEqual(self.stats.median([]), 0)
+
+    def test_mode(self):
+        self.assertEqual(self.stats.mode([1, 2, 2, 3, 4]), [2])
+        self.assertEqual(set(self.stats.mode([1, 1, 2, 2, 3])), {1, 2})
+        self.assertIsNone(self.stats.mode([1, 2, 3]))
+        self.assertIsNone(self.stats.mode([]))
+
+    def test_variance(self):
+        self.assertAlmostEqual(self.stats.variance([1, 2, 3]), 2/3, places=9)
+        self.assertEqual(self.stats.variance([]), 0)
+
+    def test_standard_deviation(self):
+        self.assertAlmostEqual(
+            self.stats.standard_deviation([1, 2, 3]),
+            math.sqrt(2/3),
+            places=9
+        )
+
+    # --------------------
+    # Hypothesis Testing
+    # --------------------
+    def test_z_test(self):
+        z0 = statistics.z_test(5, 4, 2, 2, 30, 30)
+        self.assertIsInstance(z0, float)
+
+    def test_p_value(self):
+        z0 = 1.96
+        p_two_tailed = statistics.p_value(z0, two_tailed=True)
+        p_one_tailed = statistics.p_value(z0, two_tailed=False)
+        self.assertGreater(p_two_tailed, 0)
+        self.assertLess(p_two_tailed, 1)
+        self.assertGreater(p_one_tailed, 0)
+        self.assertLess(p_one_tailed, 1)
+
+    def test_f_test(self):
+        f = statistics.f_test(4, 2)
+        self.assertEqual(f, (4*4) / (2*2))
+
+    def test_truncate(self):
+        self.assertEqual(statistics.truncate(16.4567, 2), 16.45)
+        self.assertEqual(statistics.truncate(-1.139, 2), -1.13)
+
+    # --------------------
+    # ANOVA
+    # --------------------
+    def test_ss_between_within_total(self):
+        groups = [[1, 2], [3, 4], [5, 6]]
+        grand_mean = self.stats.mean([x for g in groups for x in g])
+
+        ssb = self.stats.ss_between(groups, grand_mean, self.stats)
+        ssw = self.stats.ss_within(groups, self.stats)
+        sst = self.stats.ss_total(groups, grand_mean)
+
+        self.assertAlmostEqual(ssb + ssw, sst, places=9)
+
+    def test_degrees_of_freedom(self):
+        groups = [[1, 2], [3, 4], [5, 6]]
+        self.assertEqual(statistics.df_between(groups), 2)
+        self.assertEqual(statistics.df_within(groups), 3)
+
+    def test_mean_squares(self):
+        self.assertEqual(statistics.ms_between(10, 2), 5)
+        self.assertEqual(statistics.ms_between(10, 0), 0)
+        self.assertEqual(statistics.ms_within(20, 4), 5)
+        self.assertEqual(statistics.ms_within(20, 0), 0)
+
+    def test_effect_sizes(self):
+        self.assertEqual(statistics.eta_squared(5, 10), 0.5)
+        omega = statistics.omega_squared(10, 20, 2, 6)
+        self.assertIsInstance(omega, float)
+
+
+if __name__ == "__main__":
+    unittest.main()
