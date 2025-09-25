@@ -1,11 +1,15 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import math
 import unittest
-from statistics import statistics
+from stat_lib.StatisticsFunctions import Statistics
 
 
 class TestStatistics(unittest.TestCase):
     def setUp(self):
-        self.stats = statistics()
+        self.stats = Statistics()
 
     # --------------------
     # Descriptive Statistics
@@ -40,25 +44,25 @@ class TestStatistics(unittest.TestCase):
     # Hypothesis Testing
     # --------------------
     def test_z_test(self):
-        z0 = statistics.z_test(5, 4, 2, 2, 30, 30)
+        z0 = Statistics.z_test(5, 4, 2, 2, 30, 30)
         self.assertIsInstance(z0, float)
 
     def test_p_value(self):
         z0 = 1.96
-        p_two_tailed = statistics.p_value(z0, two_tailed=True)
-        p_one_tailed = statistics.p_value(z0, two_tailed=False)
+        p_two_tailed = Statistics.p_value(z0, two_tailed=True)
+        p_one_tailed = Statistics.p_value(z0, two_tailed=False)
         self.assertGreater(p_two_tailed, 0)
         self.assertLess(p_two_tailed, 1)
         self.assertGreater(p_one_tailed, 0)
         self.assertLess(p_one_tailed, 1)
 
     def test_f_test(self):
-        f = statistics.f_test(4, 2)
+        f = Statistics.f_test(4, 2)
         self.assertEqual(f, (4*4) / (2*2))
 
     def test_truncate(self):
-        self.assertEqual(statistics.truncate(16.4567, 2), 16.45)
-        self.assertEqual(statistics.truncate(-1.139, 2), -1.13)
+        self.assertEqual(Statistics.truncate(16.4567, 2), 16.45)
+        self.assertEqual(Statistics.truncate(-1.139, 2), -1.13)
 
     # --------------------
     # ANOVA
@@ -67,26 +71,26 @@ class TestStatistics(unittest.TestCase):
         groups = [[1, 2], [3, 4], [5, 6]]
         grand_mean = self.stats.mean([x for g in groups for x in g])
 
-        ssb = self.stats.ss_between(groups, grand_mean, self.stats)
-        ssw = self.stats.ss_within(groups, self.stats)
+        ssb = self.stats.ss_between(groups, grand_mean)
+        ssw = self.stats.ss_within(groups)
         sst = self.stats.ss_total(groups, grand_mean)
 
         self.assertAlmostEqual(ssb + ssw, sst, places=9)
 
     def test_degrees_of_freedom(self):
         groups = [[1, 2], [3, 4], [5, 6]]
-        self.assertEqual(statistics.df_between(groups), 2)
-        self.assertEqual(statistics.df_within(groups), 3)
+        self.assertEqual(Statistics.df_between(groups), 2)
+        self.assertEqual(Statistics.df_within(groups), 3)
 
     def test_mean_squares(self):
-        self.assertEqual(statistics.ms_between(10, 2), 5)
-        self.assertEqual(statistics.ms_between(10, 0), 0)
-        self.assertEqual(statistics.ms_within(20, 4), 5)
-        self.assertEqual(statistics.ms_within(20, 0), 0)
+        self.assertEqual(Statistics.ms_between(10, 2), 5)
+        self.assertEqual(Statistics.ms_between(10, 0), 0)
+        self.assertEqual(Statistics.ms_within(20, 4), 5)
+        self.assertEqual(Statistics.ms_within(20, 0), 0)
 
     def test_effect_sizes(self):
-        self.assertEqual(statistics.eta_squared(5, 10), 0.5)
-        omega = statistics.omega_squared(10, 20, 2, 6)
+        self.assertEqual(Statistics.eta_squared(5, 10), 0.5)
+        omega = Statistics.omega_squared(10, 20, 2, 6)
         self.assertIsInstance(omega, float)
 
 

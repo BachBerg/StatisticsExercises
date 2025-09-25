@@ -1,11 +1,15 @@
-import math
-from scipy.stats import norm
-from scipy.stats import f
-from scipy.stats import t
-import numpy as np
-from StatisticsFunctions import statistics as sf
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+import math
+from scipy.stats import f, t, norm
+from stat_lib.StatisticsFunctions import Statistics
+
+
+# -----------------------------
 # PROBLEM 1 FROM EXAM S2021 1.1-1.5
+# -----------------------------
 # A govermental agency needs to make a comparative test of two vacines
 # as they use different technologies. A small emergency study is 
 # conducted with 32 participants who are randomly split into two groups
@@ -18,7 +22,10 @@ n1, n2 = 10, 16
 y1, y2 = 11.8, 13.9
 sigma1, sigma2 = 3.6, 2.1
 
-# Question 1.1
+
+# -----------------------------
+# Question 1.1 - F-test critical value
+# -----------------------------
 # we first like to test the quality of the variances i.e.
 # H0: sigma1 = sigma2 & H1: sigma1 != sigma2
 
@@ -27,14 +34,14 @@ sigma1, sigma2 = 3.6, 2.1
 
 
 crit = f.ppf(0.95,n1-1,n2-1)
-print(f"1.1 - Critical value at alpha = 5% is: {sf.truncate(crit,3)}")
+print(f"1.1 - Critical value at alpha = 5% is: {Statistics.truncate(crit,3)}")
 # So the cirtical value for the test is 2.587
 # answer option 2
 
 
-
-
-# Question 1.2
+# -----------------------------
+# Question 1.2 - 95% CI for sigma1^2 / sigma2^2
+# -----------------------------
 # What is the 95% two-sided confidence interval for sigma1^2 / sigma2^2?
 lower_crit = f.ppf(1-0.05/2, n1-1, n2-1)
 upper_crit = f.ppf(0.05/2, n1-1, n2-1)
@@ -48,8 +55,9 @@ print(f"1.2 - {RoV/lower_crit}, {RoV/upper_crit}")
 
 
 
-
-# Question 1.3
+# -----------------------------
+# Question 1.3 - P-value for t-test (unknown equal variances)
+# -----------------------------
 # for question 1.3-1.5 we assume that the true variances are equal but
 # unknown ie sigma1 = sigma2 = sigma
 # we like to test H0: mu1 = mu2 & H1: mu1 != mu2
@@ -67,26 +75,30 @@ t0 = (y1 - y2) / Se
 # i.e. the one-tailed p-value, so we multiply by 2 for two-tailed
 # the smallest alpha that rejects H0 the test is then the p-value
 
-P_value = 2 * t.sf(np.abs(t0), df)
-print(f"1.3 - P value for the test is: {sf.truncate(P_value,2)}")
+P_value = 2 * t.sf(abs(t0), df)
+print(f"1.3 - P value for the test is: {Statistics.truncate(P_value,2)}")
 # So the smallest alpha that rejects H0 the test is 0.071
 # answer option 4 - 10 %
 
-# Question 1.4
+# -----------------------------
+# Question 1.4 - 95% CI for mu1 - mu2
+# -----------------------------
 # find the 95% two-sided confidence interval for mu1 - mu2
 # with up to two significant digits after the decimal point
 margin_of_error = t.ppf(0.975, df) * Se
 
 ci_lower = (y1 - y2) - margin_of_error
 ci_upper = (y1 - y2) + margin_of_error
-print(f"1.4 - mu1 - mu2 is: ({sf.truncate(ci_lower,2)}, {sf.truncate(ci_upper,2)})")
+print(f"1.4 - mu1 - mu2 is: ({Statistics.truncate(ci_lower,2)}, {Statistics.truncate(ci_upper,2)})")
 # So the 95% two-sided confidence interval
 # for mu1 - mu2 is (-4.396, 0.19)
 # answer option 5
 
 
 
-# Question 1.5
+# -----------------------------
+# Question 1.5 - Minimum sample size for 75% power
+# -----------------------------
 # what is the minimun sample size for each group ie. n1 = n2 = n
 # so that the power of the above test of the means is above 75%
 # for a difference of sigma in the means i.e. |mu1 - mu2| = sigma?
@@ -104,6 +116,6 @@ z_alpha = norm.ppf(1 - alpha / 2)
 z_beta = norm.ppf(power)
 
 n = 2 * ((z_alpha + z_beta)**2 / effect_size**2)
-print(f"1.5 - n: {sf.truncate(n,2)}")
-# So the minimum sample size for each group is 16
-# answer option 
+print(f"1.5 - n: {Statistics.truncate(n,2)}")
+# So the minimum sample size for each group is 13.88 or 14
+# answer option 2: 20 since it is the smallest option that would be sufficient

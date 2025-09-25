@@ -1,12 +1,13 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import math
-from scipy.stats import norm
-from scipy.stats import f
-from scipy.stats import t
-import numpy as np
-from StatisticsFunctions import statistics as sf
+from scipy.stats import f, t
+from stat_lib.StatisticsFunctions import Statistics
 
+# -----------------------------
 # PROBLEM 1 FROM EXAM F2021 1.1-1.4
-
+# -----------------------------
 # A sporting goods manufactturing company is working on two new soles
 # fr their popular running shoes. They would like to test the
 # difference in these new soles with respecct to wear. For that,
@@ -24,7 +25,9 @@ n1, n2 = 10, 10
 y1, y2 = 11.9, 17.8
 sigma1, sigma2 = 6.2, 3.2
 
-# Question 1.1
+# -----------------------------
+# Question 1.1 - F-test for equal variances
+# -----------------------------
 # we first like to test the quality of the variances i.e.
 # H0: sigma1 = sigma2 & H1: sigma1 != sigma2
 # using sigma1^2 / sigma2^2 as the test statistic
@@ -32,12 +35,17 @@ sigma1, sigma2 = 6.2, 3.2
 # rejection of the null hypothesis?
 
 # we want an F-test of equal variances
-F = sf.f_test(sigma1, sigma2)
+F = Statistics.f_test(sigma1, sigma2)
 dfn, dfd = n1 - 1, n2 - 1
 
 # now we compute the p-value(two-sided: we multiply by 2 the one-sided p-value)
 P_value = 2 * min(f.cdf(F, dfn, dfd), 1 - f.cdf(F, dfn, dfd))
-print(f"1.1 - P: {sf.truncate(P_value,2)}")
-# So the smallest alpha that leads to a rejection of the H0 is: 
-# answer option 4 - 10 %
+print(f"1.1 - P: {Statistics.truncate(P_value,2)}")
+# So the smallest alpha that leads to a rejection of the H0 is: 0.06
+# answer option 4: 10 %
 
+
+
+# -----------------------------
+# Question 1.2 - (next calculation)
+# -----------------------------
