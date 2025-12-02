@@ -58,18 +58,18 @@ P = 1 - f.cdf(F, dfb, dfe)
 print(f"10.2 - P-value: {Statistics.truncate(P,3)}")
 # P =  0.066 , answer is 4
 
-# Since segments are exposed to different intesities of 
+# Since segments are exposed to different intensities of 
 # traffic, it is decided that randomly selecting the 
-# segments introduces excessive variation. Therfore,
+# segments introduces excessive variation. Therefore,
 # it is decided to run a new set of experiments and 
-# apply all brands of paint in each segment. Thas is, 
-# the experiements are blocked into 6 blocks
-# shich represents the segments. each segments is then
-# diveded into 3 pieces in a row to apply the paints.
+# apply all brands of paint in each segment. That is, 
+# the experiments are blocked into 6 blocks
+# which represents the segments. each segments is then
+# divided into 3 pieces in a row to apply the paints.
 
 ## QUESTION 12
 # Which one of the following is a proper configuration 
-# corresponding to the randomized comoplete block 
+# corresponding to the randomized complete block 
 # design(RCBD) where each segment of highway constitutes 
 # a block?
 
@@ -82,8 +82,8 @@ print(f"10.2 - P-value: {Statistics.truncate(P,3)}")
 # Thus, the proper configuration is: answer 5
 
 ## QUESTION 13
-# in the new RCBD, the MSBlock is calulated using(Note that 
-# y^_i and y^_j, are the average repsonses for the i'th
+# in the new RCBD, the MSBlock is calculated using(Note that 
+# y^_i and y^_j, are the average responses for the i'th
 # treatment effect and j'th block effect respectively)
 # similarly y^ is the grand average
 
@@ -92,7 +92,7 @@ print(f"10.2 - P-value: {Statistics.truncate(P,3)}")
 # answer: 1
 
 # from the dataset obtained from the new RCBD,
-# described obeve, we have the following sum of squares:
+# described above, we have the following sum of squares:
 SST = 640 # total sum of squares
 SSB = 290
 SSE = 160
