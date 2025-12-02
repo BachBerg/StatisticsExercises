@@ -41,6 +41,7 @@ SST = 121 # total sum of squares
 # 3 - The mice are the block effect
     # A block effect implies that we explicitly account for blocks in the model (like row or column in a Latin square).
     # Here, each mouse seems to be a random experimental unit, not a block.
+    
 # 4 - all of the above
     # Since 1, 2, and 3 are all incorrect → statement 4 is incorrect.
 # 5 - None of the above
@@ -65,3 +66,4 @@ F = MST / MSE # F statistic
 
 P_value = 1 - f.cdf(F, dfT, dfE)
 print(f"2.2 - P: {Statistics.truncate(P_value,2)}")
+# P-value is 0.06 
