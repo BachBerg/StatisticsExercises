@@ -8,7 +8,7 @@ from stat_lib.StatisticsFunctions import Statistics
 
 
 # -----------------------------
-# PROBLEM 2 FROM EXAM s2024 6-8
+# PROBLEM 2 question 6-8 FROM EXAM s2024
 # -----------------------------
 
 # A factorial design in three factors A, B and C is used 
