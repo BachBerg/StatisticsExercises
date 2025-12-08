@@ -43,15 +43,13 @@ a = 3 # number of suppliers
 b = 4 # number of incubators
 n = 3 # number of replications pr. cell
 
-# Total number of observations
-N = a * b * n
 
 # Degrees of freedom for a two way ANOVA with interaction
 df_supplier = a -1
 df_incubator = b -1
 df_interaction = (a -1) * (b -1)
 df_error = a * b * (n - 1)
-df_total = N -1
+
 
 # degrees of freedom for the model
 df_model = df_supplier + df_incubator + df_interaction
